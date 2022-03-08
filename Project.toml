@@ -1,0 +1,13 @@
+name = "BirdClef"
+uuid = "62e9eaf6-0a2e-4699-afc3-0766ec03b089"
+authors = ["Custards1 <swagyolamos@gmail.com> and contributors"]
+version = "0.1.0"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
