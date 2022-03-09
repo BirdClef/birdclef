@@ -71,7 +71,7 @@ Then, to run the project:
 $ julia --project=. main.jl
 ```
 
-## (Option 3) Dockerfile
+## (Option 3) Dockerfile; DONT USE FOR NOW
 
 You must have docker installed on your system.
 
