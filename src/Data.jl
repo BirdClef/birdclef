@@ -4,6 +4,33 @@ using .Zip
 
 data_path = joinpath(@__DIR__,"data")
 
+const _base_kaggle_error = 
+"""You MUST have kaggle installed to download the dataset or manually download and extract it yourself"
+
+To manually downlead it yourself:
+Navigate to the place you downleaded this project and create a directory called data.
+Download the BirdClef2022 dataset from kaggle.com and extract the birdclef-2022 directory into the 
+directory you just created.
+This project should now have the file structure:
+
+data/
+    birdclef-2022/
+        ...
+src/
+    ...
+...
+
+Using Kaggle:
+Download and install kaggle using your python's pip.
+Once you have done that, go to https://www.kaggle.com/docs/api to get your credentials.
+Put the credentials at 
+Linux/Mac:  $(get(ENV,"HOME","\$HOME"))/.kaggle/kaggle.json
+Windows  : C:\\Users<Windows-username>.kaggle\\kaggle.json
+"""
+
+
+kaggle_error(pythoncmd) = isnothing(pythoncmd) ? _base_kaggle_error : "$_base_kaggle_error\nTo download kaggle, run this in your terminal:\n\t\$ $pythoncmd -m pip install kaggle.\n"
+
 function foldersize(folder)
     total_size = 0 
     function appendwork!(work,folder)
@@ -55,13 +82,35 @@ function has_dataset(path::String = data_path)
     validate_directory(birdclef) && foldersize(birdclef)>=6600000000
 end
 
-
-
+function find_python_kaggle(python)
+    try
+    run(`$python -m kaggle --v`)
+    return "$python -m kaggle"
+    catch e
+        throw(ErrorException(kaggle_error(python)))
+    end
+end
+function find_kaggle()
+    kaggle = Sys.which("kaggle")
+    if !isnothing(kaggle)
+        return kaggle    
+    end
+    python3 = Sys.which("python3")
+    if !isnothing(python3)
+        return find_python_kaggle(python3)    
+    end
+    python = Sys.which("python")
+    if !isnothing(python)
+        return find_python_kaggle(python)
+    end
+    throw(ErrorException(kaggle_error(nothing)))
+end
 
 function download_dataset(path::String = data_path)
-    run(`kaggle competitions download -c birdclef-2022 -p $path`)
+    kaggle = find_kaggle()
+    run(`$kaggle competitions download -c birdclef-2022 -p $path`)
     zipped,unzipped = joinpath(path,"birdclef-2022.zip"),joinpath(path,"birdclef-2022")
-    unzip_into(zipped,unzipped)
+    extract(zipped,unzipped)
     rm(zipped,force=true)
 end
 

@@ -24,7 +24,11 @@ $ kaggle --v
 
 You must also authenticate with kaggle; Go to www.kaggle.com and retrieve your credentials.
 
-You may either follow the kaggle documentation, and put the credentials as $HOME/.kaggle/kaggle.json
+You may either follow the kaggle documentation, and put the credentials at 
+
+Linux/Mac: $HOME/.kaggle/kaggle.json
+
+Windows  : C:\Users<Windows-username>.kaggle\kaggle.json
 
 OR set the environment variables $KAGGLE_USERNAME and $KAGGLE_KEY to your credentials.
 

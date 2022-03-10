@@ -6,6 +6,7 @@ version = "0.1.0"
 [deps]
 Flux = "587475ba-b771-5e3f-ad9e-33799f191a9c"
 LibSndFile = "b13ce0c6-77b0-50c6-a2db-140568b8d1a5"
+ZipFile = "a5390f91-8eb1-5f08-bee0-b1d1ffed6cea"
 
 [compat]
 julia = "1"
