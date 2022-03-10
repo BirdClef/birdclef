@@ -2,10 +2,9 @@ module Data
 include("utils.jl")
 using .Zip
 
-data_path = joinpath(@__DIR__,"data")
-
 const _base_kaggle_error = 
-"""You MUST have kaggle installed to download the dataset or manually download and extract it yourself"
+"""
+You MUST have kaggle installed to download the dataset or manually download and extract it yourself"
 
 To manually downlead it yourself:
 Navigate to the place you downleaded this project and create a directory called data.
@@ -77,9 +76,9 @@ function validate_directory(directories...)
 end
 
 
-function has_dataset(path::String = data_path)
-    birdclef = joinpath(path,"birdclef-2022")
-    validate_directory(birdclef) && foldersize(birdclef)>=6600000000
+function has_dataset(path::String,dataset::String)
+    data_path = joinpath(path,dataset)
+    validate_directory(data_path) && foldersize(data_path)>=6600000000
 end
 
 function find_python_kaggle(python)
@@ -106,12 +105,19 @@ function find_kaggle()
     throw(ErrorException(kaggle_error(nothing)))
 end
 
-function download_dataset(path::String = data_path)
+function download_dataset(path::String,dataset::String)
+    @info "Downloading dataset..." path dataset
+    @info "Searching for kaggle..."
     kaggle = find_kaggle()
-    run(`$kaggle competitions download -c birdclef-2022 -p $path`)
-    zipped,unzipped = joinpath(path,"birdclef-2022.zip"),joinpath(path,"birdclef-2022")
+    cmd=`$kaggle competitions download -c $dataset -p $path`
+    @info "Starting data installation using" cmd
+    run(cmd)
+    zipped,unzipped = joinpath(path,"$dataset.zip"),joinpath(path,dataset)
+    @info "extracting files...." zipped unzipped
     extract(zipped,unzipped)
+    @info "cleaning up..."
     rm(zipped,force=true)
+    @info "Done downloading dataset" dataset
 end
 
 
