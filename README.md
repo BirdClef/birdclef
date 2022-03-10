@@ -6,7 +6,7 @@ Project info here
 You must have julia installed on your system.
 
 ## (Option 1) Using Kaggle to get dataset
-You must have kaggle installed on your system, and you must have the command 'unzip'.
+You must have kaggle installed on your system.
 To install kaggle:
 ```
 $ pip install kaggle
